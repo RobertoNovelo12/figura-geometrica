@@ -172,6 +172,7 @@ button {
     align-items: center;
 }
 
+
 #canvasStatic {
     max-width: 100%;
     height: auto;
@@ -401,22 +402,21 @@ input[type="range"] {
     align-items: center;
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
     padding: 0 1rem;
 }
 
 
 .canvas-container-3d {
     background: var(--card-color);
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     width: 100%;
-    max-width: 600px;
-    height: 500px;
+    height: 510px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 30px;
 }
 
 
@@ -429,7 +429,6 @@ input[type="range"] {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    width: 200px;
 }
 
 
@@ -558,14 +557,6 @@ input[type="range"] {
 }
 
 
-
-@media (max-width: 992px) {
-    .canvas-container-3d {
-        height: 400px;
-    }
-}
-
-
 @media (max-width: 768px) {
 
     .contenedor-procedimiento {
@@ -584,6 +575,7 @@ input[type="range"] {
     .titulo-procedimiento {
         font-size: 2rem;
     }
+
     .contenedor-principal {
         flex-direction: column;
         align-items: center;
@@ -616,78 +608,21 @@ input[type="range"] {
     .canvas-container-2d {
         padding: 1.5rem;
     }
-    
-    #canvas2D {
-        height: 300px;
-    }
 
-    .contenedor-figura-color {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-    
-    .figure-container {
+    .triangle-container{
         order: 1;
-        width: 100%;
-    }
-    
-    .color-picker-container {
-        order: 2;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .color-picker-3d {
-        flex-direction: row;
-        width: auto;
-        padding: 1rem;
-        gap: 1rem;
-    }
-    
-    .canvas-container-3d {
-        height: 350px;
-        width: 350px;
-        padding: 0.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .titulo-figura {
-        font-size: 2rem;
-    }
-    
-    .subtitulo-calcular, .resultados-container h3 {
-        font-size: 1.3rem;
-    }
-    
-    .seccion-formulario, .seccion-resultados {
-        padding: 1.5rem;
-    }
-    
-    .contenedor-2d {
-        margin-top: 4rem;
-        padding: 0 1rem;
-    }
-    
-    .color-picker {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
     }
     
     #canvas2D {
-        height: 250px;
-    }
-
-    .canvas-container-3d {
         height: 300px;
         width: 300px;
     }
     
-    .titulo-vista {
-        font-size: 1.8rem;
-        margin-top: 3rem;
+
+
+    .canvas-container-3d {
+        height: 300px;
+        padding: 0.5rem;
+        width: 300px;
     }
 }
