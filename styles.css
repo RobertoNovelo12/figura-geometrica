@@ -458,7 +458,7 @@ input[type="range"] {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     flex: 1;
 }
 
@@ -543,7 +543,8 @@ input[type="range"] {
 .explicacion-procedimiento p {
     margin-bottom: 1rem; 
     font-size: 1.1rem; 
-    color: #555; 
+    color: #555;
+    flex-wrap: wrap;
 }
 
 
@@ -565,11 +566,11 @@ input[type="range"] {
     }
 
     .formula-area, .formula-perimetro, .explicacion-procedimiento {
-        max-width: 100%;
+        width: 100%;
     }
 
     .imagen-triangulo {
-        margin-top: 2rem;
+        margin: 1rem;
     }
 
     .titulo-procedimiento {
@@ -624,5 +625,10 @@ input[type="range"] {
         height: 300px;
         padding: 0.5rem;
         width: 300px;
+    }
+
+    .explicacion-procedimiento p {
+        margin-bottom: 1rem; 
+        font-size: 0.8rem; 
     }
 }
