@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triángulo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <h1 class="titulo-figura">Figura Geométrica</h1>
+
+    <div class="contenedor-principal">
+        
+        <div class="seccion-formulario">
+            <h2 class="subtitulo-calcular">Calcular</h2>
+            
+            <form class="formulario-inputs">
+                <div class="grupo-input">
+                    <label for="base">Valor 1:</label>
+                    <input type="number" id="base" min="1" placeholder="Ingrese base">
+                </div>
+                
+                <div class="grupo-input">
+                    <label for="altura">Valor 2:</label>
+                    <input type="number" id="altura" min="1" placeholder="Ingrese altura">
+                </div>
+                
+                <div class="grupo-botones">
+                    <button type="button" id="calcularBtn">Calcular</button>
+                    <button type="button" id="reiniciarBtn">Reiniciar valores</button>
+                </div>
+                
+                <div class="grupo-botones-vistas">
+                    <button type="button" id="ver2DBtn">Ver en 2D</button>
+                    <button type="button" id="ver3DBtn">Ver en 3D</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="seccion-resultados">
+            <div class="triangle-container">
+                <canvas id="canvasStatic" width="150" height="150"></canvas>
+            </div>
+            
+            <div class="resultados-container">
+                <h3>Resultados</h3>
+                <div class="resultados-detalle">
+                    <p><strong>Área:</strong> <span id="resultado"></span></p>
+                    <p><strong>Perímetro:</strong> <span id="perimetro2d"></span></p>
+                </div>
+                
+                <button type="button" id="procedimientoBtn">Procedimiento</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

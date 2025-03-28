@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedimiento</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+
+    <button class="back-button" onclick="window.history.back()">← Volver</button>
+
+    <h1 class="titulo-procedimiento">Procedimiento</h1>
+
+    <div class="contenedor-procedimiento">
+        
+        <div class="formula-area">
+            <h2>Fórmula de área</h2>
+            <div class="formula-math" id="formulaArea"></div>
+        </div>
+
+        <div class="imagen-triangulo">
+            <img src="img/formula.png" alt="Triángulo" id="imagenCalculo">
+        </div>
+
+        <div class="formula-perimetro">
+            <h2>Fórmula de perímetro</h2>
+            <div class="formula-math" id="formulaPerimetro"></div>
+        </div>
+
+        <div id="procedimiento" class="explicacion-procedimiento">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script type="module" src="js/ui.js"></script>
+</html>

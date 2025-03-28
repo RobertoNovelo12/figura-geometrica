@@ -1,0 +1,693 @@
+:root {
+    --primary-color: #4285f4;
+    --secondary-color: #3367d6;
+    --accent-color: #34a853;
+    --error-color: #ea4335;
+    --background-color: #f8f9fa;
+    --card-color: #ffffff;
+    --text-color: #202124;
+    --text-secondary: #5f6368;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+html {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.titulo-figura {
+    text-align: center;
+    margin: 2rem 0 1rem;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+
+.contenedor-principal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+
+.seccion-formulario {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+    background: var(--card-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.subtitulo-calcular {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+
+.formulario-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.grupo-input label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.grupo-input input {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #dadce0;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.grupo-input input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+    outline: none;
+}
+
+
+.grupo-botones, .grupo-botones-vistas {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+
+button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    flex: 1;
+}
+
+#calcularBtn, #procedimientoBtn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#calcularBtn:hover, #procedimientoBtn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+#reiniciarBtn {
+    background-color: #f1f3f4;
+    color: var(--text-color);
+}
+
+#reiniciarBtn:hover {
+    background-color: #e8eaed;
+}
+
+#ver2DBtn, #ver3DBtn {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+#ver2DBtn:hover, #ver3DBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+
+.seccion-resultados {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.triangle-container {
+    background: var(--card-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#canvasStatic {
+    max-width: 100%;
+    height: auto;
+}
+
+.resultados-container {
+    background: var(--card-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.resultados-container h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.resultados-detalle {
+    margin: 1.5rem 0;
+}
+
+.resultados-detalle p {
+    font-size: 1.1rem;
+    margin: 0.75rem 0;
+}
+
+.resultados-detalle strong {
+    color: var(--text-secondary);
+}
+
+
+
+
+
+.titulo-vista {
+    text-align: center;
+    margin: 3rem 0 1.5rem;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.back-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    white-space: nowrap; 
+    overflow: visible; 
+    max-width: 95vw; 
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+
+.contenedor-2d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+
+
+
+
+.contenedor-figura-color {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+
+.figure-container {
+    flex: 1;
+    min-width: 500px;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas-container-2d {
+    background: var(--card-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: fit-content;
+}
+
+#canvas2D {
+    width: 512px;
+    height: 512px;
+    display: block;
+}
+
+
+.color-picker-container {
+    flex: 0 0 auto;
+    margin-top: 1rem;
+}
+
+.color-picker {
+    background: var(--card-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    gap: 0.5rem;
+    width: 220px;
+}
+
+
+.color-display-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    gap: 10px;
+    width: 100%;
+}
+
+#selectedColor {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    flex-shrink: 0;
+    cursor: pointer; 
+}
+
+#colorHexInput {
+    height: 40px; 
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    max-width: 100px;
+    flex-shrink: 0;
+}
+
+
+
+.color-table {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.color-box {
+    width: 25px;  
+    height: 25px; 
+    cursor: pointer;
+    border: 1px solid #ccc;
+    transition: scale 0.1s;
+}
+
+.color-box:hover {
+    scale: 120%;
+}
+
+
+
+.sliders-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+}
+
+.slider-group label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="range"] {
+    width: 100%; 
+}
+
+
+@media (max-width: 768px) {
+    .color-table {
+        display: none; 
+    }
+
+    
+    #color-picker-input {
+        display: none; 
+    }
+}
+
+
+
+
+
+
+
+.contenedor-principal-3d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+
+.canvas-container-3d {
+    background: var(--card-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 600px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.color-picker-3d {
+    background: var(--card-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 200px;
+}
+
+
+
+
+.titulo-procedimiento {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 2.5rem;
+    color: var(--primary-color, #2a3d66);
+}
+
+
+
+
+.contenedor-procedimiento {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.formula-area {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+    flex: 1;
+}
+
+.formula-area h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2a3d66;
+}
+
+
+.formula-math {
+    font-size: 1.2rem;
+    color: #555;
+    word-wrap: break-word;
+}
+
+
+
+
+.imagen-triangulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+    max-width: 500px;
+}
+
+.imagen-triangulo img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.formula-perimetro {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    flex: 1;
+}
+
+.formula-perimetro h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2a3d66;
+}
+
+
+
+
+.explicacion-procedimiento {
+    background: #f9f9f9; 
+    padding: 2rem; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    max-width: 100%; 
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    line-height: 1.6; 
+    font-size: 1.1rem; 
+    color: #333; 
+}
+
+
+.explicacion-procedimiento h2 {
+    font-size: 1.8rem; 
+    color: #2a3d66; 
+    font-weight: bold;
+    margin-bottom: 1.5rem; 
+    border-bottom: 2px solid #2a3d66; 
+    padding-bottom: 0.5rem;
+}
+
+
+.explicacion-procedimiento p {
+    margin-bottom: 1rem; 
+    font-size: 1.1rem; 
+    color: #555; 
+}
+
+
+.formula-math {
+    font-size: 1.4rem; 
+    background-color: #f4f7fa; 
+    padding: 1rem;
+    border-radius: 8px; 
+    border: 1px solid #ddd; 
+    margin-bottom: 1.5rem;
+}
+
+
+
+@media (max-width: 992px) {
+    .canvas-container-3d {
+        height: 400px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .contenedor-procedimiento {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .formula-area, .formula-perimetro, .explicacion-procedimiento {
+        max-width: 100%;
+    }
+
+    .imagen-triangulo {
+        margin-top: 2rem;
+    }
+
+    .titulo-procedimiento {
+        font-size: 2rem;
+    }
+    .contenedor-principal {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .seccion-formulario, .seccion-resultados {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .grupo-botones, .grupo-botones-vistas {
+        flex-direction: column;
+    }
+
+    .back-button {
+        top: 0.5rem;
+        left: 0.5rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        max-width: calc(100vw - 1rem); 
+        margin-right: 0.5rem; 
+    }
+
+    .titulo-vista {
+        font-size: 2rem;
+        margin-top: 3.5rem;
+    }
+    
+    
+    .canvas-container-2d {
+        padding: 1.5rem;
+    }
+    
+    #canvas2D {
+        height: 300px;
+    }
+
+    .contenedor-figura-color {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .figure-container {
+        order: 1;
+        width: 100%;
+    }
+    
+    .color-picker-container {
+        order: 2;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .color-picker-3d {
+        flex-direction: row;
+        width: auto;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .canvas-container-3d {
+        height: 350px;
+        width: 350px;
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-figura {
+        font-size: 2rem;
+    }
+    
+    .subtitulo-calcular, .resultados-container h3 {
+        font-size: 1.3rem;
+    }
+    
+    .seccion-formulario, .seccion-resultados {
+        padding: 1.5rem;
+    }
+    
+    .contenedor-2d {
+        margin-top: 4rem;
+        padding: 0 1rem;
+    }
+    
+    .color-picker {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    #canvas2D {
+        height: 250px;
+    }
+
+    .canvas-container-3d {
+        height: 300px;
+        width: 300px;
+    }
+    
+    .titulo-vista {
+        font-size: 1.8rem;
+        margin-top: 3rem;
+    }
+}
