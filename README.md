@@ -16,15 +16,6 @@ git clone https://github.com/RobertoNovelo12/figura-geometrica.git
 
 # Ingresar al directorio del proyecto
 cd figura-geometrica
-
-# Instalar dependencias (si aplica)
-npm install  # Si está basado en Node.js
-o
-pip install -r requirements.txt  # Si es en Python
-
-# Iniciar la aplicación
-npm start  # Para aplicaciones en Node.js
-python app.py  # Para aplicaciones en Python
 ```
 
 ## Uso
