@@ -1,5 +1,7 @@
 import { dibujarTriangulo } from './canvas2D.js';
-import { cambiarColor3D } from './canvas3D.js';
+import { triangulo3D } from './canvas3D.js';
+
+window.triangulo3D = triangulo3D; 
 
 const colorPalette = document.querySelector('.color-table');
 const saturationSlider = document.getElementById('saturation-slider');
@@ -8,23 +10,16 @@ const colorDisplay = document.getElementById('selectedColor');
 const colorHexInput = document.getElementById('colorHexInput');
 const colorPickerInput = document.getElementById('color-picker-input');
 
-
-colorDisplay.addEventListener('click', () => {
-    colorPickerInput.click(); 
-});
-
+colorDisplay.addEventListener('click', () => colorPickerInput.click());
 
 colorPickerInput.addEventListener('input', () => {
-    const selectedColor = colorPickerInput.value; 
-    console.log("Color seleccionado: ", selectedColor);
-    updateColor(selectedColor); 
+    const selectedColor = colorPickerInput.value;
+    updateColor(selectedColor);
 });
-
 
 colorPickerInput.addEventListener('blur', () => {
-    colorPickerInput.style.display = 'none'; 
+    colorPickerInput.style.display = 'none';
 });
-
 
 const colors = [
     ["#000000", "#2B2B2B", "#555555", "#808080", "#AAAAAA", "#D5D5D5", "#FFFFFF"], 
@@ -38,47 +33,44 @@ const colors = [
     ["#FF0080", "#E00070", "#C00060", "#A00050", "#800040", "#600030", "#400020"]  
 ];
 
-
 function hslToHex(h, s, l) {
     s /= 100;
     l /= 100;
-    let c = (1 - Math.abs(2 * l - 1)) * s;
-    let x = c * (1 - Math.abs((h / 60) % 2 - 1));
-    let m = l - c / 2;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+    const m = l - c / 2;
     let r, g, b;
 
-    if (h < 60) { r = c; g = x; b = 0; }
-    else if (h < 120) { r = x; g = c; b = 0; }
-    else if (h < 180) { r = 0; g = c; b = x; }
-    else if (h < 240) { r = 0; g = x; b = c; }
-    else if (h < 300) { r = x; g = 0; b = c; }
-    else { r = c; g = 0; b = x; }
+    if (h < 60) [r, g, b] = [c, x, 0];
+    else if (h < 120) [r, g, b] = [x, c, 0];
+    else if (h < 180) [r, g, b] = [0, c, x];
+    else if (h < 240) [r, g, b] = [0, x, c];
+    else if (h < 300) [r, g, b] = [x, 0, c];
+    else [r, g, b] = [c, 0, x];
 
-    r = Math.round((r + m) * 255);
-    g = Math.round((g + m) * 255);
-    b = Math.round((b + m) * 255);
+    const rHex = Math.round((r + m) * 255).toString(16).padStart(2, '0');
+    const gHex = Math.round((g + m) * 255).toString(16).padStart(2, '0');
+    const bHex = Math.round((b + m) * 255).toString(16).padStart(2, '0');
 
-    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase()}`;
+    return `#${rHex}${gHex}${bHex}`.toUpperCase();
 }
 
 function hexToHsl(hex) {
-    let r = parseInt(hex.substring(1, 3), 16) / 255;
-    let g = parseInt(hex.substring(3, 5), 16) / 255;
-    let b = parseInt(hex.substring(5, 7), 16) / 255;
+    const r = parseInt(hex.substr(1, 2), 16) / 255;
+    const g = parseInt(hex.substr(3, 2), 16) / 255;
+    const b = parseInt(hex.substr(5, 2), 16) / 255;
 
-    let max = Math.max(r, g, b);
-    let min = Math.min(r, g, b);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h, s, l = (max + min) / 2;
 
-    if (max === min) {
-        h = s = 0; 
-    } else {
-        let d = max - min;
+    if (max === min) h = s = 0;
+    else {
+        const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
+            case r: h = ((g - b) / d + (g < b ? 6 : 0)); break;
+            case g: h = ((b - r) / d + 2); break;
+            case b: h = ((r - g) / d + 4); break;
         }
         h /= 6;
     }
@@ -90,73 +82,67 @@ function hexToHsl(hex) {
     };
 }
 
+function updateColor(color) {
+    let h, s, l;
+
+    if (color.startsWith("#")) {
+        ({ h, s, l } = hexToHsl(color));
+    } else {
+        const [_, hVal, sVal, lVal] = color.match(/hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)/);
+        h = parseInt(hVal); s = parseInt(sVal); l = parseInt(lVal);
+    }
+
+    const colorHsl = `hsl(${h}, ${s}%, ${l}%)`;
+    colorDisplay.style.backgroundColor = colorHsl;
+
+    const hexColor = hslToHex(h, s, l);
+    colorHexInput.value = hexColor;
+    colorPickerInput.value = hexColor;
+
+    const canvas = document.getElementById("canvas2D");
+    const ctx = canvas?.getContext("2d");
+    const base = parseFloat(localStorage.getItem("base"));
+    const altura = parseFloat(localStorage.getItem("altura"));
+
+    if (ctx && !isNaN(base) && !isNaN(altura)) {
+        dibujarTriangulo(hexColor, base, altura, ctx);
+    }
+
+    
+    if (window.triangulo3D && typeof window.triangulo3D.cambiarColor === 'function') {
+        window.triangulo3D.cambiarColor(hexColor);
+    } else {
+        console.warn("triangulo3D no está definido o no tiene el método cambiarColor.");
+    }
+}
+
+function updateFromSliders() {
+    const hue = hueSlider.value;
+    const saturation = saturationSlider.value;
+    const lightness = 50;
+    updateColor(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+}
 
 function generateColorPalette() {
-    colorPalette.innerHTML = ""; 
-
+    colorPalette.innerHTML = "";
     colors.forEach(row => {
         const rowDiv = document.createElement("div");
         rowDiv.style.display = "flex";
-
         row.forEach(color => {
-            const colorBox = document.createElement("div");
-            colorBox.classList.add('color-box');
-            colorBox.style.backgroundColor = color;
-            colorBox.dataset.color = color;
-
-            colorBox.addEventListener('click', () => updateColor(color));
-
-            rowDiv.appendChild(colorBox);
+            const box = document.createElement("div");
+            box.classList.add('color-box');
+            box.style.backgroundColor = color;
+            box.dataset.color = color;
+            box.addEventListener("click", () => updateColor(color));
+            rowDiv.appendChild(box);
         });
-
         colorPalette.appendChild(rowDiv);
     });
 }
 
 
-
-function updateColor(color) {
-    let h, s, l;
-
-    
-    if (color.startsWith("#")) {
-        const hsl = hexToHsl(color);
-        h = hsl.h;
-        s = hsl.s;
-        l = hsl.l;
-    } else {  
-        const hslValues = color.match(/hsl\((\d+), (\d+)%, (\d+)%\)/);
-        h = parseInt(hslValues[1]);
-        s = parseInt(hslValues[2]);
-        l = parseInt(hslValues[3]);
-    }
-
-    
-    const colorHsl = `hsl(${h}, ${s}%, ${l}%)`;
-    colorDisplay.style.backgroundColor = colorHsl;
-
-    
-    const hexColor = hslToHex(h, s, l);
-    colorHexInput.value = hexColor.toUpperCase(); 
-
-    
-    dibujarTriangulo(hexColor);
-    cambiarColor3D(hexColor);
-}
-
-
-function updateFromSliders() {
-    const saturation = saturationSlider.value;
-    const hue = hueSlider.value;
-    const lightness = 50;  
-
-    updateColor(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
-}
-
-
 saturationSlider.addEventListener('input', updateFromSliders);
 hueSlider.addEventListener('input', updateFromSliders);
-
 
 generateColorPalette();
 updateColor("#FF0000"); 
