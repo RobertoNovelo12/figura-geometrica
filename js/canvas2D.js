@@ -5,24 +5,39 @@ export function dibujarTrianguloEstatico() {
     clearCanvas(ctx, canvas);
 
     const points = { x1: 30, y1: 120, x2: 120, y2: 120, x3: 75, y3: 30 };
-    drawTriangle(ctx, points.x1, points.y1, points.x2, points.y2, points.x3, points.y3, "#ffffff", "#000000");
+    const triangle = new Triangle2D(ctx, points.x1, points.y1, points.x2, points.y2, points.x3, points.y3, "#ffffff", "#000000");
+    triangle.draw();
 }
 
 function clearCanvas(ctx, canvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawTriangle(ctx, x1, y1, x2, y2, x3, y3, fillColor, strokeColor = "#000000") {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.lineTo(x3, y3);
-    ctx.closePath();
-    ctx.fillStyle = fillColor;
-    ctx.fill();
-    ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = 2;
-    ctx.stroke();
+class Triangle2D {
+    constructor(ctx, x1, y1, x2, y2, x3, y3, fillColor, strokeColor = "#000000") {
+        this.ctx = ctx;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
+        this.fillColor = fillColor;
+        this.strokeColor = strokeColor;
+    }
+
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x1, this.y1);
+        this.ctx.lineTo(this.x2, this.y2);
+        this.ctx.lineTo(this.x3, this.y3);
+        this.ctx.closePath();
+        this.ctx.fillStyle = this.fillColor;
+        this.ctx.fill();
+        this.ctx.strokeStyle = this.strokeColor;
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -122,15 +137,6 @@ export function dibujarTriangulo(color, base, altura, ctx) {
     let x3 = x1 + (base * scale) / 2;
     let y3 = y1 - altura * scale;
 
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.lineTo(x3, y3);
-    ctx.closePath();
-
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    const triangle = new Triangle2D(ctx, x1, y1, x2, y2, x3, y3, color, "#000000");
+    triangle.draw();
 }
