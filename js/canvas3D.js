@@ -65,42 +65,50 @@ export class Triangulo3D {
     }
 
     createPrismGeometry() {
-        const depth = this.base / 2;
-        const offsetX = this.base / 2;
+    const depth = this.base / 2;
+    const offsetX = this.base / 2;
 
-        const geometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array([
-            offsetX, 0, 0,
-            offsetX + this.base, 0, 0,
-            offsetX + this.base / 2, this.altura, 0,
-            offsetX, 0, -depth,
-            offsetX + this.base, 0, -depth,
-            offsetX + this.base / 2, this.altura, -depth
-        ]);
+    const geometry = new THREE.BufferGeometry();
+    const vertices = new Float32Array([
+        offsetX, 0, 0,
+        offsetX + this.base, 0, 0,
+        offsetX + this.base / 2, this.altura, 0,
+        offsetX, 0, -depth,
+        offsetX + this.base, 0, -depth,
+        offsetX + this.base / 2, this.altura, -depth
+    ]);
 
-        const indices = new Uint16Array([
-            0, 1, 2, 3, 5, 4,
-            0, 1, 4, 0, 4, 3,
-            1, 2, 5, 1, 5, 4,
-            2, 0, 3, 2, 3, 5
-        ]);
+    const indices = new Uint16Array([
+        0, 1, 2, 3, 5, 4,
+        0, 1, 4, 0, 4, 3,
+        1, 2, 5, 1, 5, 4,
+        2, 0, 3, 2, 3, 5
+    ]);
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-        geometry.computeVertexNormals();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+    geometry.computeVertexNormals();
 
-        const material = new THREE.MeshPhongMaterial({
-            color: this.colorTriangulo,
-            side: THREE.DoubleSide,
-            shininess: 30,
-            specular: 0x111111
-        });
+    // CENTRAR para que rote sobre su centro
+    geometry.center();
 
-        this.prism = new THREE.Mesh(geometry, material);
-        this.scene.add(this.prism);
-        
-        return this.prism;
-    }
+    const material = new THREE.MeshPhongMaterial({
+        color: this.colorTriangulo,
+        side: THREE.DoubleSide,
+        shininess: 30,
+        specular: 0x111111
+    });
+
+    this.prism = new THREE.Mesh(geometry, material);
+
+    // Añadir a la escena
+    this.scene.add(this.prism);
+
+    this.prism.position.set(0, 2.5, 0);
+
+    return this.prism;
+}
+
 
     setupLights() {
         const mainLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -151,6 +159,36 @@ export class Triangulo3D {
         }
     }
 
+    actualizarEscala(escala) {
+    this.base = (parseFloat(localStorage.getItem("base")) || 5) * escala;
+    this.altura = (parseFloat(localStorage.getItem("altura")) || 5) * escala;
+
+    // Elimina el prisma viejo
+    if (this.prism) {
+        this.scene.remove(this.prism);
+        this.prism.geometry.dispose();
+        this.prism.material.dispose();
+        this.prism = null;
+    }
+
+    // Crea el prisma nuevo con la base y altura escaladas
+    this.prism = this.createPrismGeometry();
+
+    const prismCenter = new THREE.Vector3(
+        this.base / 2,
+        this.altura / 3,
+        -this.base / 4
+    );
+
+    this.setupControls(prismCenter);
+
+    // Ajusta cámara según nueva escala
+    const distance = Math.max(this.base, this.altura) * 1.5;
+    this.camera.position.set(distance, distance * 0.5, distance);
+    this.camera.lookAt(prismCenter);
+}
+
+
     ajustarCanvas3D() {
         const container = document.getElementById('container-3d');
         if (container && this.renderer && this.camera) {
@@ -162,6 +200,16 @@ export class Triangulo3D {
             this.camera.updateProjectionMatrix();
         }
     }
+
+    aplicarRotacion(grados) {
+        if (!this.prism) return;
+
+        const radianes = THREE.MathUtils.degToRad(grados);
+
+        this.prism.rotation.set(0, 0, radianes);
+    }
+
+
 }
 
 

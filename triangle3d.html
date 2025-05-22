@@ -1,64 +1,78 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vista 3D</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vista 3D</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
 
-    <button class="back-button" onclick="window.history.back()">← Volver</button>
-    
-    <h1 class="titulo-vista">Vista 3D</h1>
+        <button class="back-button" onclick="window.history.back()">← Volver</button>
+        
+        <h1 class="titulo-vista">Vista 3D</h1>
 
-    <div class="contenedor-principal-3d">
-        <div class="contenedor-figura-color">
-            <div class="figure-container">
-                <div class="canvas-container-3d">
-                    <div id="container-3d" style="width: 100%; height: 100%;"></div>
-                </div>
-                
-                <div style="display: none;">
-                    <div id="alturaValor"></div>
-                    <div id="baseValor"></div>
-                </div>
-            </div>
-            
-            <div class="color-picker">
-                <label>Color</label>
-                
-                <div class="color-display-container">
-                    <div class="color-display" id="selectedColor" style="background-color: #ff0000;"></div>
-                    <input type="text" id="colorHexInput" readonly>
-                </div>
-
-                <input type="color" id="color-picker-input" style="display: none;">
-
-
-                <div id="colorTable3D" class="color-table"></div>
-
-                <div class="sliders-container">
-                    <label for="saturation-slider">Saturación</label>
-                    <input type="range" id="saturation-slider" min="0" max="100" value="100">
+        <div class="contenedor-principal-3d">
+            <div class="contenedor-figura-color">
+                <div class="figure-container">
+                    <div class="canvas-container-3d">
+                        <div id="container-3d" style="width: 100%; height: 100%;"></div>
+                    </div>
                     
-                    <label for="hue-slider">Tono</label>
-                    <input type="range" id="hue-slider" min="0" max="360" value="0">
+                    <div style="display: none;">
+                        <div id="alturaValor"></div>
+                        <div id="baseValor"></div>
+                    </div>
                 </div>
                 
+                <div class="color-picker">
+                    <label>Color</label>
+                    
+                    <div class="color-display-container">
+                        <div class="color-display" id="selectedColor" style="background-color: #ff0000;"></div>
+                        <input type="text" id="colorHexInput" readonly>
+                    </div>
+
+                    <input type="color" id="color-picker-input" style="display: none;">
+
+
+                    <div id="colorTable3D" class="color-table"></div>
+
+                    <div class="sliders-container">
+                        <label for="saturation-slider">Saturación</label>
+                        <input type="range" id="saturation-slider" min="0" max="100" value="100">
+                        
+                        <label for="hue-slider">Tono</label>
+                        <input type="range" id="hue-slider" min="0" max="360" value="0">
+                    </div>
+                <label for="scale-select">Escala:</label>
+                <select id="scale-select">
+                <option value="2">2:1 (Agrandar)</option>
+                <option value="1" selected>1:1 (Original)</option>
+                <option value="0.5">1:2 (Reducir)</option>
+                </select>
+                <label for="rotation-select">Rotación:</label>
+                <select id="rotation-select">
+                <option value="0" selected>Original</option>
+                <option value="45">45°</option>
+                <option value="90">90°</option>
+                <option value="180">180°</option>
+                </select>
+
+
+                </div>
+            </div>
+
+            <div class="result-container" style="display: none;">
+                <p><strong></strong> <span id="resultado3d"></span></p>
+                <p><strong></strong> <span id="perimetro3d"></span></p>
             </div>
         </div>
 
-        <div class="result-container" style="display: none;">
-            <p><strong></strong> <span id="resultado3d"></span></p>
-            <p><strong></strong> <span id="perimetro3d"></span></p>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script type="module" src="js/color-picker.js"></script>
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/canvas3D.js"></script>
-</body>
-</html>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+        <script type="module" src="js/color-picker.js"></script>
+        <script type="module" src="js/main.js"></script>
+        <script type="module" src="js/canvas3D.js"></script>
+    </body>
+    </html>

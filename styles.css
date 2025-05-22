@@ -12,6 +12,55 @@
     --transition: all 0.3s ease;
 }
 
+label[for="scale-select"], label[for="rotation-select"] {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-right: 8px;
+  font-size: 1rem;
+  user-select: none;
+}
+
+#scale-select, #rotation-select {
+  appearance: none; /* quitar estilo por defecto */
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  padding: 8px 36px 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  position: relative;
+  outline: none;
+  min-width: 150px;
+}
+
+/* Flecha personalizada con SVG y posición */
+#scale-select, #rotation-select {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%233367d6" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+}
+
+/* Hover y focus */
+#scale-select:hover,
+#scale-select:focus,
+#rotation-select:hover,
+#rotation-select:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 8px var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* Opciones del select */
+#scale-select option, #rotation-select option {
+  color: var(--text-color);
+  background-color: var(--card-color);
+}
+
+
 html {
     box-sizing: border-box;
     width: 100%;
