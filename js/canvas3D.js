@@ -8,6 +8,8 @@ export class Triangulo3D {
         this.renderer = null;
         this.prism = null;
         this.controls = null;
+        this.sun = null;
+        this.sunLight = null;
     }
 
     iniciarEscena() {
@@ -19,6 +21,7 @@ export class Triangulo3D {
             this.setupThreeJSEnvironment();
             this.prism = this.createPrismGeometry();
             this.setupLights();
+            this.createSun(); // Añadimos el sol
             
             const prismCenter = new THREE.Vector3(
                 this.base / 2,
@@ -40,12 +43,25 @@ export class Triangulo3D {
 
     setupThreeJSEnvironment() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xd0dce9);
+        this.scene.background = new THREE.Color(0x87CEEB); // Color cielo más realista
+
+        // Crear un plano para recibir sombras
+        const planeGeometry = new THREE.PlaneGeometry(this.base * 4, this.base * 4);
+        const planeMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.8 
+        });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = -0.01;
+        plane.receiveShadow = true; // Habilitar recepción de sombras
+        this.scene.add(plane);
 
         const gridSize = this.base * 2;
         const gridDivisions = this.base * 2;
         const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x000000, 0x808080);
-        gridHelper.position.set(this.base / 2, -0.01, 0);
+        gridHelper.position.set(this.base / 2, 0, 0);
         this.scene.add(gridHelper);
 
         const container = document.getElementById("container-3d");
@@ -61,10 +77,15 @@ export class Triangulo3D {
         
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(container.clientWidth, container.clientHeight);
+        
+        // Habilitar sombras en el renderer
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
         container.appendChild(this.renderer.domElement);
     }
 
-    createPrismGeometry() {
+createPrismGeometry() {
     const depth = this.base / 2;
     const offsetX = this.base / 2;
 
@@ -100,26 +121,98 @@ export class Triangulo3D {
     });
 
     this.prism = new THREE.Mesh(geometry, material);
+    
+    // Habilitar proyección de sombras
+    this.prism.castShadow = true;
+    this.prism.receiveShadow = true;
 
     // Añadir a la escena
     this.scene.add(this.prism);
 
-    this.prism.position.set(0, 2.5, 0);
+    // La altura del prisma dividida por 2 es lo que necesitamos subir
+    this.prism.position.set(0, this.altura / 2, 0);
 
     return this.prism;
 }
 
+    createSun() {
+        // Crear geometría del sol
+        const sunGeometry = new THREE.SphereGeometry(1, 32, 32);
+        const sunMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xFFD700,
+            emissive: 0xFFD700,
+            emissiveIntensity: 0.3
+        });
+        
+        this.sun = new THREE.Mesh(sunGeometry, sunMaterial);
+        
+        // Posicionar el sol
+        const sunDistance = Math.max(this.base, this.altura) * 3;
+        this.sun.position.set(sunDistance * 0.8, sunDistance * 0.6, sunDistance * 0.4);
+        
+        this.scene.add(this.sun);
+
+        // Crear rayos del sol (líneas decorativas)
+        this.createSunRays();
+    }
+
+    createSunRays() {
+        const raysMaterial = new THREE.LineBasicMaterial({ 
+            color: 0xFFD700,
+            transparent: true,
+            opacity: 0.6
+        });
+
+        for (let i = 0; i < 8; i++) {
+            const angle = (i / 8) * Math.PI * 2;
+            const rayGeometry = new THREE.BufferGeometry();
+            
+            const rayLength = 2;
+            const startRadius = 1.2;
+            const endRadius = startRadius + rayLength;
+            
+            const startX = Math.cos(angle) * startRadius;
+            const startY = Math.sin(angle) * startRadius;
+            const endX = Math.cos(angle) * endRadius;
+            const endY = Math.sin(angle) * endRadius;
+            
+            rayGeometry.setAttribute('position', new THREE.Float32BufferAttribute([
+                startX, startY, 0,
+                endX, endY, 0
+            ], 3));
+            
+            const ray = new THREE.Line(rayGeometry, raysMaterial);
+            ray.position.copy(this.sun.position);
+            this.scene.add(ray);
+        }
+    }
 
     setupLights() {
-        const mainLight = new THREE.DirectionalLight(0xffffff, 1);
-        mainLight.position.set(5, 10, 7).normalize();
-        this.scene.add(mainLight);
+        // Luz principal (sol) con sombras
+        this.sunLight = new THREE.DirectionalLight(0xFFFFAA, 2);
+        const sunDistance = Math.max(this.base, this.altura) * 3;
+        this.sunLight.position.set(sunDistance * 0.8, sunDistance * 0.6, sunDistance * 0.4);
+        
+        // Configurar sombras para la luz del sol
+        this.sunLight.castShadow = true;
+        this.sunLight.shadow.mapSize.width = 2048;
+        this.sunLight.shadow.mapSize.height = 2048;
+        this.sunLight.shadow.camera.near = 0.5;
+        this.sunLight.shadow.camera.far = sunDistance * 2;
+        this.sunLight.shadow.camera.left = -this.base * 2;
+        this.sunLight.shadow.camera.right = this.base * 2;
+        this.sunLight.shadow.camera.top = this.altura * 2;
+        this.sunLight.shadow.camera.bottom = -this.altura * 2;
+        
+        this.scene.add(this.sunLight);
 
-        const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        // Luz de relleno suave
+        const fillLight = new THREE.DirectionalLight(0xADD8E6, 0.3);
         fillLight.position.set(-5, 3, -5).normalize();
         this.scene.add(fillLight);
 
-        this.scene.add(new THREE.AmbientLight(0x404040, 0.8));
+        // Luz ambiente más tenue para crear contraste
+        this.scene.add(new THREE.AmbientLight(0x404040, 0.4));
     }
 
     setupControls(prismCenter) {
@@ -144,6 +237,12 @@ export class Triangulo3D {
     startAnimationLoop() {
         const animate = () => {
             requestAnimationFrame(animate);
+            
+            // Animar el sol (rotación suave)
+            if (this.sun) {
+                this.sun.rotation.y += 0.01;
+            }
+            
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
         };
@@ -160,34 +259,45 @@ export class Triangulo3D {
     }
 
     actualizarEscala(escala) {
-    this.base = (parseFloat(localStorage.getItem("base")) || 5) * escala;
-    this.altura = (parseFloat(localStorage.getItem("altura")) || 5) * escala;
+        this.base = (parseFloat(localStorage.getItem("base")) || 5) * escala;
+        this.altura = (parseFloat(localStorage.getItem("altura")) || 5) * escala;
 
-    // Elimina el prisma viejo
-    if (this.prism) {
-        this.scene.remove(this.prism);
-        this.prism.geometry.dispose();
-        this.prism.material.dispose();
-        this.prism = null;
+        // Elimina el prisma viejo
+        if (this.prism) {
+            this.scene.remove(this.prism);
+            this.prism.geometry.dispose();
+            this.prism.material.dispose();
+            this.prism = null;
+        }
+
+        // Crea el prisma nuevo con la base y altura escaladas
+        this.prism = this.createPrismGeometry();
+
+        const prismCenter = new THREE.Vector3(
+            this.base / 2,
+            this.altura / 3,
+            -this.base / 4
+        );
+
+        this.setupControls(prismCenter);
+
+        // Ajusta cámara según nueva escala
+        const distance = Math.max(this.base, this.altura) * 1.5;
+        this.camera.position.set(distance, distance * 0.5, distance);
+        this.camera.lookAt(prismCenter);
+
+        // Actualizar posición del sol según la nueva escala
+        if (this.sun && this.sunLight) {
+            const sunDistance = Math.max(this.base, this.altura) * 3;
+            const newSunPos = new THREE.Vector3(
+                sunDistance * 0.8, 
+                sunDistance * 0.6, 
+                sunDistance * 0.4
+            );
+            this.sun.position.copy(newSunPos);
+            this.sunLight.position.copy(newSunPos);
+        }
     }
-
-    // Crea el prisma nuevo con la base y altura escaladas
-    this.prism = this.createPrismGeometry();
-
-    const prismCenter = new THREE.Vector3(
-        this.base / 2,
-        this.altura / 3,
-        -this.base / 4
-    );
-
-    this.setupControls(prismCenter);
-
-    // Ajusta cámara según nueva escala
-    const distance = Math.max(this.base, this.altura) * 1.5;
-    this.camera.position.set(distance, distance * 0.5, distance);
-    this.camera.lookAt(prismCenter);
-}
-
 
     ajustarCanvas3D() {
         const container = document.getElementById('container-3d');
@@ -208,18 +318,13 @@ export class Triangulo3D {
 
         this.prism.rotation.set(0, 0, radianes);
     }
-
-
 }
 
-
 const triangulo3D = new Triangulo3D();
-
 
 document.addEventListener("DOMContentLoaded", () => {
     triangulo3D.iniciarEscena();
     triangulo3D.ajustarCanvas3D();
 });
-
 
 export { triangulo3D };
